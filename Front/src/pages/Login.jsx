@@ -1,4 +1,40 @@
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  authSelector,
+  currentUserSelector,
+  login,
+} from "../plugins/redux/reducers/AuthReducer";
+
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector(authSelector);
+  const curruntUser = useSelector(currentUserSelector);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onBlur",
+  });
+
+  const onSubmit = async (data) => {
+    console.log("loginForm", data);
+    if (isValid) {
+      console.log("isValid", isValid);
+      const response = await dispatch(login(data));
+      console.log(response);
+      if (response.payload?.success) {
+        navigate("/");
+      } else {
+        console.log(response);
+      }
+    }
+  };
+
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -19,7 +55,10 @@ function Login() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <div>
                   <label
                     htmlFor="email"
@@ -30,11 +69,17 @@ function Login() {
                   <input
                     type="email"
                     name="email"
+                    {...register("email", {
+                      required: "Email is required",
+                    })}
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
                     required=""
                   />
+                  {errors?.email && (
+                    <p className="text-red-600">email is required</p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -44,6 +89,9 @@ function Login() {
                     Password
                   </label>
                   <input
+                    {...register("password", {
+                      required: "password is required",
+                    })}
                     type="password"
                     name="password"
                     id="password"
@@ -51,6 +99,9 @@ function Login() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
                   />
+                  {errors?.password && (
+                    <p className="text-red-600">password is required</p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-start">
@@ -81,7 +132,7 @@ function Login() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Sign in
                 </button>

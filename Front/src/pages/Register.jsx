@@ -1,4 +1,31 @@
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { registers } from "../plugins/redux/reducers/AuthReducer";
+
 function Register() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isValid },
+    watch,
+  } = useForm({ mode: "onBlur" });
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    if (isValid) {
+      const response = await dispatch(registers(data));
+      if (response.payload?.success) {
+        navigate("/");
+      } else {
+        console.log(response.payload);
+      }
+    }
+  };
+
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -17,9 +44,32 @@ function Register() {
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create and account
+                Create an account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Your Name
+                  </label>
+                  <input
+                    {...register("neme", { required: "name is required" })}
+                    type="text"
+                    name="name"
+                    id="name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="John Doe"
+                    required=""
+                  />
+                  {errors?.name && (
+                    <p className="text-red-600">name is required</p>
+                  )}
+                </div>
                 <div>
                   <label
                     htmlFor="email"
@@ -28,6 +78,7 @@ function Register() {
                     Your email
                   </label>
                   <input
+                    {...register("email", { required: "email is required" })}
                     type="email"
                     name="email"
                     id="email"
@@ -35,6 +86,9 @@ function Register() {
                     placeholder="name@company.com"
                     required=""
                   />
+                  {errors?.email && (
+                    <p className="text-red-600">email is required</p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -44,6 +98,9 @@ function Register() {
                     Password
                   </label>
                   <input
+                    {...register("password", {
+                      required: "password is required",
+                    })}
                     type="password"
                     name="password"
                     id="password"
@@ -51,6 +108,9 @@ function Register() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
                   />
+                  {errors?.password && (
+                    <p className="text-red-600">password is required</p>
+                  )}
                 </div>
                 <div>
                   <label
