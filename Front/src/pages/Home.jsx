@@ -1,5 +1,11 @@
+import Menu from "../containers/Menu";
+
 function Home() {
-  return <div>Home</div>;
+  return (
+    <>
+      <Menu />
+    </>
+  );
 }
 
 export default Home;
