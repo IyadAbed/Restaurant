@@ -5,7 +5,7 @@ const { default: mongoose } = require("mongoose");
 
 const generateToken = (user) => {
   const token = jwt.sign(
-    { id: user._id, name: user.name, email: user.email },
+    { id: user._id, name: user.name, email: user.email, role: 1 },
     process.env.ACCESS_TOKEN_SECRET
   );
   return token;

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Username from "../features/user/Username";
+// import Username from "../features/user/Username";
 
 function Header() {
   return (
@@ -8,7 +8,7 @@ function Header() {
         Fast React Pizza Co.
       </Link>
 
-      <Username />
+      {/* <Username /> */}
     </header>
   );
 }

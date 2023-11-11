@@ -2,12 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
 import DeleteItem from "../components/DeleteItem";
 import UpdateQuantity from "../components/UpdateQuantity";
+import { TimePicker } from "react-ios-time-picker";
 // import { formatCurrency } from "../../utils/helpers";
 import {
   addItem,
   getCurrentQuantityById,
   getItem,
 } from "../plugins/redux/reducers/TableReducer";
+import { useState } from "react";
 
 function MenuItem({ pizza }) {
   const dispatch = useDispatch();
@@ -29,6 +31,11 @@ function MenuItem({ pizza }) {
     };
     dispatch(addItem(newItem));
   }
+  const [value, setValue] = useState("10:00");
+
+  const onChange = (timeValue) => {
+    setValue(timeValue);
+  };
 
   return (
     <li className="flex gap-4 py-2">
@@ -43,16 +50,21 @@ function MenuItem({ pizza }) {
           {discreption}
         </p>
         <div className="mt-auto flex items-center justify-between">
-          {/* {!soldOut ? (
-            <p className="text-sm">{formatCurrency(price)}</p>
+          {!soldOut ? (
+            <p className="text-sm">${price}</p>
           ) : (
             <p className="text-sm font-medium uppercase text-stone-500">
               Sold out
             </p>
-          )} */}
+          )}
 
           {isInCart && (
             <div className="flex items-center gap-3 sm:gap-8">
+              <TimePicker
+                onChange={onChange}
+                value={value}
+                popupClassName="flex justify-center items-center"
+              />
               <UpdateQuantity pizzaId={id} currentQuantity={currentQuantity} />
               <DeleteItem pizzaId={id} />
             </div>

@@ -69,6 +69,7 @@ const authSlice = createSlice({
         state.auth = !!token;
         state.currentUser = currentUser;
         state.token = token;
+        state.role = 1;
         localStorage.setItem("session", token);
       }
       return state;

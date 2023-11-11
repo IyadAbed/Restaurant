@@ -23,7 +23,7 @@ module.exports = {
   getAll: async (req, res) => {
     try {
       const allMenu = await Menu.find();
-      res.status(201).json({ success: allMenu });
+      res.status(200).json({ success: allMenu });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

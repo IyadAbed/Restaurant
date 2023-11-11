@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
 const app = express();
 const userRoutes = require("./Routes/userRouter");
 const menuRouter = require("./Routes/menuRouter");
-// const subjectRoutes = require("./Routes/subjectRoute");
+const orderRouter = require("./Routes/orders");
 app.use(cors());
 app.use(express.json());
 app.use(userRoutes);
 app.use(menuRouter);
-// app.use(subjectRoutes);
+app.use(orderRouter);
 const port = process.env.PORT;
 const dbUrl = process.env.DBURL;
 
