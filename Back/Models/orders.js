@@ -6,10 +6,6 @@ const OrdersSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    email: {
-      type: String,
-      required: true,
-    },
     phoneNumber: {
       type: Number,
       required: true,
@@ -28,14 +24,15 @@ const OrdersSchema = new mongoose.Schema(
     serveTime: {
       serveDate: { type: String },
       serveHour: { type: String },
-      required,
     },
     price: {
       type: Number,
-      required,
+      required: true,
     },
   },
   {
     timestamps: true,
   }
 );
+
+module.exports = mongoose.model("Orders", OrdersSchema);

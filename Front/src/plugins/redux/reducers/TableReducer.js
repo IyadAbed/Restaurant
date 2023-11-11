@@ -31,9 +31,9 @@ export const getAll = createAsyncThunk("getAll/menu", async () => {
 //   // ],
 // };
 
-export const addNewOrder = createAsyncThunk("oreder/menu", async (oreder) => {
+export const addNewOrder = createAsyncThunk("order/menu", async (order) => {
   try {
-    const { data } = await axios.post("login", loginFrom);
+    const { data } = await axios.post("addOrder", order);
     return data;
   } catch (error) {
     console.log(error.response.data);
@@ -60,14 +60,14 @@ const tableSlice = createSlice({
       const item = state.items.find((item) => item.pizzaId === action.payload);
 
       item.quantity++;
-      item.totalPrice = item.quantity * item.unitPrice;
+      item.totalPrice = item.quantity * item.price;
     },
     decreaseItemQuantity(state, action) {
       // payload = pizzaId
-      const item = state.cart.find((item) => item.pizzaId === action.payload);
+      const item = state.items.find((item) => item.pizzaId === action.payload);
 
       item.quantity--;
-      item.totalPrice = item.quantity * item.unitPrice;
+      item.totalPrice = item.quantity * item.price;
 
       if (item.quantity === 0)
         tableSlice.caseReducers.deleteItem(state, action);
@@ -77,17 +77,19 @@ const tableSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAll.fulfilled, (state, action) => {
-      if (typeof action.payload == "object" && action.payload.success) {
-        state.menu = action.payload.success;
-      }
-      return state;
-    });
     builder.addCase(getAll.pending, (state) => {
       state.status = "loading";
       return state;
     });
+    builder.addCase(getAll.fulfilled, (state, action) => {
+      if (typeof action.payload == "object" && action.payload.success) {
+        state.menu = action.payload.success;
+        state.status = "idle";
+      }
+      return state;
+    });
     builder.addCase(getAll.rejected, (state) => {
+      state.status = "error";
       return state;
     });
   },
