@@ -8,46 +8,52 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdOutlineCancel } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { addNewItem, getAll } from "../../plugins/redux/reducers/TableReducer";
 
 // import 'dotenv/config'
 export const AddMenu = ({ setRefresh, refresh }) => {
   const notifySuccess = (msg) => toast.success(msg);
   const notifyError = (msg) => toast.error(msg);
-
-  const [show, setShow] = useState(false);
-  const [bookInfo, setInfo] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    ratings: "",
-    quantity: "",
-    pages: "",
-    author: "",
-    img: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onBlur",
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = async (event) => {
-    console.log("drobi");
+  const dispatch = useDispatch();
 
+  const [show, setShow] = useState(false);
+  // const [bookInfo, setInfo] = useState({
+  //   name: "",
+  //   description: "",
+  //   price: "",
+  //   category: "",
+  //   ratings: "",
+  //   quantity: "",
+  //   pages: "",
+  //   author: "",
+  //   img: "",
+  // });
+
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setInfo((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+  const onSubmit = async (data) => {
     try {
-      event.preventDefault();
-
-      const data = await axios.post(
-        "http://localhost:8800/addproduct",
-        bookInfo
-      );
-      notifySuccess("book added success");
-      setRefresh(!refresh);
-
-      console.log("added success", data.data);
+      const res = await dispatch(addNewItem(data));
+      if (res.payload?.success) {
+        notifySuccess("Item added success");
+        console.log("added success", data);
+        await dispatch(getAll());
+      }
     } catch (err) {
       console.log(err);
       notifyError(err.message);
@@ -83,7 +89,11 @@ export const AddMenu = ({ setRefresh, refresh }) => {
         <ToastContainer />
       </div>
       {show && (
-        <form className="border p-[10px] rounded-lg" onSubmit={handleSubmit}>
+        <form
+          className="border p-[10px] rounded-lg"
+          onSubmit={handleSubmit(onSubmit)}
+          encType="multipart/form-data"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -91,27 +101,13 @@ export const AddMenu = ({ setRefresh, refresh }) => {
                 <span className="label-text">Name</span>
               </label>
               <input
+                {...register("name", { required: "name is required" })}
                 type="text"
                 name="name"
                 placeholder="Type here"
                 className="input input-sm  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.name}
-                onChange={handleChange}
               />
-            </div>
-            {/*  */}
-            <div className="form-control w-full max-w-xs">
-              <label className="label">
-                <span className="label-text">Description</span>
-              </label>
-              <input
-                type="text"
-                name="category"
-                placeholder="Type here"
-                className="input input-sm  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.category}
-                onChange={handleChange}
-              />
+              {errors?.name && <p className="text-red-600">name is required</p>}
             </div>
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -119,13 +115,15 @@ export const AddMenu = ({ setRefresh, refresh }) => {
                 <span className="label-text">Price</span>
               </label>
               <input
+                {...register("price", { required: "price is required" })}
                 type="text"
-                name="author"
+                name="price"
                 placeholder="Type here"
                 className="input input-sm  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.author}
-                onChange={handleChange}
               />
+              {errors?.price && (
+                <p className="text-red-600">price is required</p>
+              )}
             </div>
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -133,13 +131,32 @@ export const AddMenu = ({ setRefresh, refresh }) => {
                 <span className="label-text">Image</span>
               </label>
               <input
-                type="text"
-                name="description"
+                {...register("image", { required: "Image is required" })}
+                type="file"
+                name="image"
                 placeholder="Type here"
-                className="input input-sm  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.description}
-                onChange={handleChange}
+                className="input input-sm items-center pb-12 border-[#529b03] w-full max-w-xs"
               />
+              {errors?.image && (
+                <p className="text-red-600">image is required</p>
+              )}
+            </div>
+            {/*  */}
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Description</span>
+              </label>
+              <textarea
+                {...register("discreption", {
+                  required: "description is required",
+                })}
+                name="discreption"
+                placeholder="Type here"
+                className="input text-sm input-lg  border-[#529b03] w-full max-w-xs"
+              />
+              {errors?.discreption && (
+                <p className="text-red-600">Description is required</p>
+              )}
             </div>
             <div className="form-control w-full max-w-xs">
               <label className="label invisible">

@@ -11,14 +11,12 @@ import {
 } from "../plugins/redux/reducers/TableReducer";
 import { useState } from "react";
 
-function MenuItem({ pizza }) {
+function MenuItem({ pizza, selectedDate }) {
   const dispatch = useDispatch();
-
+  console.log(pizza);
   const { _id: id, name, price, discreption, soldOut, image } = pizza;
 
   const currentQuantity = useSelector(getCurrentQuantityById(id));
-  const s = useSelector(getItem);
-  console.log(s);
   const isInCart = currentQuantity > 0;
 
   function handleAddToCart() {
@@ -45,19 +43,16 @@ function MenuItem({ pizza }) {
         className={`h-24 ${soldOut ? "opacity-70 grayscale" : ""}`}
       />
       <div className="flex grow flex-col pt-0.5">
-        <p className="font-medium">{name}</p>
-        <p className="text-sm capitalize italic text-stone-500">
-          {discreption}
-        </p>
-        <div className="mt-auto flex items-center justify-between">
-          {!soldOut ? (
-            <p className="text-sm">${price}</p>
-          ) : (
-            <p className="text-sm font-medium uppercase text-stone-500">
-              Sold out
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="font-medium">{name}</p>
+            <p className="text-sm capitalize italic text-stone-500">
+              {discreption}
             </p>
-          )}
-
+          </div>
+          <p className="text-sm mr-4">${price}</p>
+        </div>
+        <div className="mt-auto flex items-center justify-end">
           {isInCart && (
             <div className="flex items-center gap-3 sm:gap-8">
               <TimePicker
@@ -70,7 +65,7 @@ function MenuItem({ pizza }) {
             </div>
           )}
 
-          {!soldOut && !isInCart && (
+          {selectedDate && !isInCart && (
             <Button type="small" onClick={handleAddToCart}>
               Add to cart
             </Button>

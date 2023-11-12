@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SiCircle } from "react-icons/si";
 import { FiLogOut } from "react-icons/fi";
 import { ImBooks } from "react-icons/im";
 import { TfiQuoteRight } from "react-icons/tfi";
 import { FcAbout } from "react-icons/fc";
+import { useDispatch } from "react-redux";
+import { logout } from "../../plugins/redux/reducers/AuthReducer";
 
 export const Aside = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <aside
       id="drawer-navigation"
@@ -16,29 +20,29 @@ export const Aside = () => {
         <ul className="space-y-2">
           <li>
             <Link
-              to="/"
+              to="/admin/Menu"
               className="flex  items-center gap-2 p-2  w-full text-base font-medium text-white rounded-lg transition duration-75 group hover:bg-[#fff] hover:text-black"
             >
               <SiCircle />
-              <span className="mr-3">overview</span>
+              <span className="mr-3">Menu</span>
             </Link>
           </li>
           <li>
             <Link
-              to="/books"
+              to="/admin/Maintenance"
               className="flex  items-center gap-2 p-2  w-full text-base font-medium text-white rounded-lg transition duration-75 group hover:bg-[#fff] hover:text-black"
             >
               <ImBooks />
-              Projects{" "}
+              Maintenance{" "}
             </Link>
           </li>
           <li>
             <Link
-              to="/quotes"
+              to="/admin/Order"
               className="flex  items-center gap-2 p-2  w-full text-base font-medium text-white rounded-lg transition duration-75 group hover:bg-[#fff] hover:text-black"
             >
               <TfiQuoteRight />
-              Users{" "}
+              Orders{" "}
             </Link>
           </li>
           <li>
@@ -50,12 +54,18 @@ export const Aside = () => {
               About Us
             </Link>
           </li>
-          <a href="/###">
+          <Link
+            to="/"
+            onClick={() => {
+              dispatch(logout);
+              navigate("/");
+            }}
+          >
             <span className="flex  items-center gap-2 p-2  w-full text-base font-medium text-white rounded-lg transition duration-75 group hover:bg-[#fff] hover:text-black">
               <FiLogOut />
               Logout
             </span>
-          </a>
+          </Link>
         </ul>
       </div>
     </aside>

@@ -32,22 +32,17 @@ const routes = [
     path: "/admin",
     children: [
       {
-        path: "/admin/lop",
-        element: <Login />,
-        allowedRoles: [1, 2],
-      },
-      {
-        path: "/admin/ho",
+        path: "/admin/Menu",
         element: <MenuTable />,
         allowedRoles: [1, 2],
       },
       {
-        path: "/admin/how",
+        path: "/admin/Maintenance",
         element: <MaintenanceTable />,
         allowedRoles: [1, 2],
       },
       {
-        path: "/admin/go",
+        path: "/admin/Order",
         element: <Order />,
         allowedRoles: [1, 2],
       },
