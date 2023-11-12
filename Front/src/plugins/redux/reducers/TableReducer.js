@@ -16,6 +16,22 @@ export const getAll = createAsyncThunk("getAll/menu", async () => {
     return error.response.data.message;
   }
 });
+
+export const addNewItem = createAsyncThunk("addNewItem/menu", async (item) => {
+  try {
+    console.log("itemitemitemitem", item);
+    const formData = new FormData();
+    formData.append("name", item.name);
+    formData.append("price", item.price);
+    formData.append("discreption", item.discreption);
+    formData.append("image", item.image[0]);
+    const { data } = await axios.post("addItem", formData);
+    return data;
+  } catch (error) {
+    console.log(error.response.data);
+    return error.response.data.message;
+  }
+});
 // {
 //   items: [],
 //   menu: [],
@@ -90,6 +106,16 @@ const tableSlice = createSlice({
     });
     builder.addCase(getAll.rejected, (state) => {
       state.status = "error";
+      return state;
+    });
+
+    builder.addCase(addNewItem.rejected, (state, action) => {
+      console.log(action?.error?.message);
+      console.log("rejected");
+      return action?.error?.message;
+    });
+    builder.addCase(addNewItem.fulfilled, (state, action) => {
+      console.log("add Successfully");
       return state;
     });
   },

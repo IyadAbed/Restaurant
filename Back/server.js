@@ -5,11 +5,13 @@ const app = express();
 const userRoutes = require("./Routes/userRouter");
 const menuRouter = require("./Routes/menuRouter");
 const orderRouter = require("./Routes/orders");
+const path = require("path");
 app.use(cors());
 app.use(express.json());
 app.use(userRoutes);
 app.use(menuRouter);
 app.use(orderRouter);
+app.use("/public", express.static(path.join(__dirname, "public")));
 const port = process.env.PORT;
 const dbUrl = process.env.DBURL;
 
