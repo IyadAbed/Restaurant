@@ -9,7 +9,7 @@ function App() {
   const dispatch = useDispatch();
   dispatch(getAll());
   const currentUser = useSelector(currentUserSelector);
-  console.log("currentUser", currentUser.role);
+  console.log("currentUser", currentUser?.role);
   return (
     <>
       <Routes>
@@ -22,7 +22,6 @@ function App() {
             >
               {route.children?.map((child, index) => {
                 if (child.allowedRoles) {
-                  console.log("imfipsfmsmfklsmflksf", child.allowedRoles);
                   return child.allowedRoles &&
                     child.allowedRoles.includes(currentUser?.role) ? (
                     <Route
