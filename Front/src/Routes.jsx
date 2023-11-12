@@ -1,9 +1,12 @@
+import MenuTable from "./layouts/includes/MenuTable";
 import Errors from "./components/Error";
 import AdminLayout from "./layouts/AdminLayout";
 import AppLayout from "./layouts/AppLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import MaintenanceTable from "./layouts/includes/MaintenanceTable";
+import Order from "./layouts/includes/Order";
 
 const routes = [
   {
@@ -11,39 +14,41 @@ const routes = [
     path: "/",
     children: [
       {
-        path: "/home",
+        path: "/",
         element: <Home />,
-        allowedRoles: [3, 2],
       },
       {
         path: "/login",
         element: <Login />,
-        allowedRoles: [3, 2],
       },
       {
         path: "/register",
         element: <Register />,
-        allowedRoles: [3, 2],
       },
     ],
   },
   {
     element: <AdminLayout />,
-    path: "/",
+    path: "/admin",
     children: [
       {
-        path: "/lop",
+        path: "/admin/lop",
         element: <Login />,
         allowedRoles: [1, 2],
       },
       {
-        path: "/ho",
-        element: <Errors />,
+        path: "/admin/ho",
+        element: <MenuTable />,
         allowedRoles: [1, 2],
       },
       {
-        path: "/go",
-        element: <Register />,
+        path: "/admin/how",
+        element: <MaintenanceTable />,
+        allowedRoles: [1, 2],
+      },
+      {
+        path: "/admin/go",
+        element: <Order />,
         allowedRoles: [1, 2],
       },
     ],
