@@ -68,7 +68,7 @@ export const AddMenu = ({ setRefresh, refresh }) => {
       <div className="flex items-center gap-5">
         <h1 className="text-[30px] font-bold py-2">Add New MenuItem</h1>
         {!show ? (
-          <div className="tooltip tooltip-primary" data-tip=" add new book">
+          <div className="tooltip tooltip-primary" data-tip="">
             <button
               onClick={handleShow}
               className="btn btn-primary btn-sm btn-circle "

@@ -47,7 +47,7 @@ export const registers = createAsyncThunk("auth/register", async (data) => {
 });
 
 export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("session");
+  localStorage.clear();
 });
 
 const authSlice = createSlice({

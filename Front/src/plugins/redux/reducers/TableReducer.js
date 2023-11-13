@@ -78,6 +78,12 @@ const tableSlice = createSlice({
       item.quantity++;
       item.totalPrice = item.quantity * item.price;
     },
+    addServeTime(state, action) {
+      const item = state.items.find(
+        (item) => item.pizzaId === action.payload.id
+      );
+      item.serveHour = action.payload.timeValue;
+    },
     decreaseItemQuantity(state, action) {
       // payload = pizzaId
       const item = state.items.find((item) => item.pizzaId === action.payload);
@@ -127,6 +133,7 @@ export const {
   increaseItemQuantity,
   decreaseItemQuantity,
   clearItems,
+  addServeTime,
 } = tableSlice.actions;
 
 export default tableSlice.reducer;
@@ -142,5 +149,3 @@ export const getTotalCartPrice = (state) =>
 
 export const getCurrentQuantityById = (id) => (state) =>
   state.table.items.find((item) => item.pizzaId === id)?.quantity ?? 0;
-
-// 'reselect'

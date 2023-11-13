@@ -7,12 +7,12 @@ const OrdersSchema = new mongoose.Schema(
       required: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     items: [
       {
-        id: { type: mongoose.Schema.Types.ObjectId, ref: "menu" },
+        id: { type: mongoose.Schema.Types.ObjectId, ref: "Menu" },
         serveHour: {
           type: String,
         },
@@ -22,8 +22,7 @@ const OrdersSchema = new mongoose.Schema(
       },
     ],
     serveTime: {
-      serveDate: { type: String },
-      serveHour: { type: String },
+      type: String,
     },
     price: {
       type: Number,

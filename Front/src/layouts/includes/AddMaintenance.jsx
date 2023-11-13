@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-
-import axios from "axios";
+import axios from "../../plugins/axios";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,59 +17,39 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 
 // import 'dotenv/config'
-export const AddMaintenance = ({ setRefresh, refresh }) => {
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: null,
-      key: "selection",
-    },
-  ]);
-  console.log("dateRange", dateRange);
+export const AddMaintenance = () => {
+  const [dateRange, setDateRange] = useState([]);
+  console.log("dateRange", dateRange[0]?.["$d"]);
 
   const currentDate = new Date();
 
   const handleSelect = (ranges) => {
     setDateRange(ranges);
   };
-  console.log(dateRange);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onBlur",
+  });
   const notifySuccess = (msg) => toast.success(msg);
   const notifyError = (msg) => toast.error(msg);
 
   const [show, setShow] = useState(false);
-  const [bookInfo, setInfo] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    ratings: "",
-    quantity: "",
-    pages: "",
-    author: "",
-    img: "",
-  });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const handleSubmit = async (event) => {
-    console.log("drobi");
-
+  const onSubmit = async (data) => {
     try {
-      event.preventDefault();
-
-      const data = await axios.post(
-        "http://localhost:8800/addproduct",
-        bookInfo
-      );
-      notifySuccess("book added success");
-      setRefresh(!refresh);
-
-      console.log("added success", data.data);
+      data.closeDates = dateRange.map((element) => {
+        return element?.["$d"];
+      });
+      const datas = await axios.post("addMaintenance", data);
+      if (datas?.data?.success) {
+        notifySuccess("book added success");
+        reset();
+      }
     } catch (err) {
       console.log(err);
       notifyError(err.message);
@@ -84,7 +64,7 @@ export const AddMaintenance = ({ setRefresh, refresh }) => {
       <div className="flex items-center gap-5">
         <h1 className="text-[30px] font-bold py-2">Add Maintenance</h1>
         {!show ? (
-          <div className="tooltip tooltip-primary" data-tip=" add new book">
+          <div className="tooltip tooltip-primary" data-tip="">
             <button
               onClick={handleShow}
               className="btn btn-primary btn-sm btn-circle "
@@ -105,7 +85,10 @@ export const AddMaintenance = ({ setRefresh, refresh }) => {
         <ToastContainer />
       </div>
       {show && (
-        <form className="border p-[10px] rounded-lg" onSubmit={handleSubmit}>
+        <form
+          className="border p-[10px] rounded-lg"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -116,13 +99,17 @@ export const AddMaintenance = ({ setRefresh, refresh }) => {
                 Impact on the Restaurant
               </label>
               <select
-                id="countries"
+                {...register("impact", { required: "required" })}
+                name="impact"
                 className=" border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option selected="">Complete shutdown</option>
-                <option value="US">Partial shutdown</option>
-                <option value="CA">Normal operations</option>
+                <option value="Complete shutdown">Complete shutdown</option>
+                <option value="Partial shutdown">Partial shutdown</option>
+                <option value="Normal operations">Normal operations</option>
               </select>
+              {errors?.impact && (
+                <p className="text-red-600">impact is required</p>
+              )}
             </div>
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -130,13 +117,15 @@ export const AddMaintenance = ({ setRefresh, refresh }) => {
                 <span className="label-text">Price</span>
               </label>
               <input
+                {...register("price", { required: "required" })}
                 type="text"
-                name="author"
+                name="price"
                 placeholder="Type here"
                 className="input input-sm  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.author}
-                onChange={handleChange}
               />
+              {errors?.price && (
+                <p className="text-red-600">price is required</p>
+              )}
             </div>
             {/*  */}
             <div className="form-control w-full max-w-xs">
@@ -144,12 +133,14 @@ export const AddMaintenance = ({ setRefresh, refresh }) => {
                 <span className="label-text">Comment</span>
               </label>
               <textarea
-                name="description"
+                {...register("comment", { required: "required" })}
+                name="comment"
                 placeholder="Type here"
                 className="input text-sm input-lg  border-[#529b03] w-full max-w-xs"
-                value={bookInfo.description}
-                onChange={handleChange}
               />
+              {errors?.comment && (
+                <p className="text-red-600">email is required</p>
+              )}
             </div>
             {/*  */}
             <div className="form-control w-full max-w-xs">
