@@ -50,6 +50,3 @@ This project represents the digital transition for a popular restaurant chain, a
 2. Install dependencies: `npm install`
 3. Start the application: `npm start`
 
-## Contributing
-
-Feel free to contribute by opening issues, providing feedback, or submitting pull requests. We welcome your contributions to enhance this digital transition project.
