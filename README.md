@@ -13,7 +13,6 @@ This project represents the digital transition for a popular restaurant chain, a
 - **Street Name:** Input field for the street name where the restaurant is located.
 - **Opening Hours:** Input fields to specify the start and end time for daily operations.
 - **List of Nearby Landmarks:** Input field to list nearby landmarks such as schools, universities, markets, etc.
-- **Optional: Add Location Button:** A button allowing users to select the restaurant's location on a map.
 
 ### Menu Form
 
