@@ -18,7 +18,7 @@ function TableOverview() {
         <span>{totalCartQuantity} pizzas</span>
         <span>${totalCartPrice}</span>
       </p>
-      <Link to="/cart">Open cart &rarr;</Link>
+      {/* <Link to="/cart">Open cart &rarr;</Link> */}
     </div>
   );
 }

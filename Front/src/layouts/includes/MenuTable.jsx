@@ -1,12 +1,15 @@
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
-import { getmenu } from "../../plugins/redux/reducers/TableReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getAll, getmenu } from "../../plugins/redux/reducers/TableReducer";
 import { AiOutlineDelete } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { AddMenu } from "./AddMenu";
+import axios from "../../plugins/axios";
 
 function MenuTable() {
   const menu = useSelector(getmenu);
+  const dispatch = useDispatch();
+
   console.log(menu);
 
   const columns = [
@@ -34,7 +37,7 @@ function MenuTable() {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: `Are you sure to delete this User ?`,
+      title: `Are you sure to delete this Item ?`,
       showConfirmButton: true,
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -43,7 +46,14 @@ function MenuTable() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire(` User was Deleted Successfully`, "", "success");
+        axios
+          .delete("http://localhost:5500/deleteItem/" + id)
+          .then((response) => {
+            console.log(response.data);
+            Swal.fire(` Item was Deleted Successfully`, "", "success");
+            dispatch(getAll());
+          })
+          .catch((error) => console.log(error.message));
       } else Swal.fire("Cancel", "", "error");
     });
   };
@@ -63,7 +73,7 @@ function MenuTable() {
       ),
       price,
       discreption,
-      image: <img src={image} className="h-12"></img>,
+      image: <img src={image} className="w-24"></img>,
     };
   });
 

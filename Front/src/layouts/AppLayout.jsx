@@ -14,7 +14,7 @@ function AppLayout() {
       <Header />
 
       <div className="overflow-scroll">
-        <main className="bg-amber-50">
+        <main className="bg-amber-100">
           <Outlet />
         </main>
       </div>

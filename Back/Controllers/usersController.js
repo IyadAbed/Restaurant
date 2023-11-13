@@ -54,9 +54,16 @@ module.exports = {
         const passMatch = await bcrypt.compare(password, userExist.password);
         if (passMatch) {
           const token = generateToken(userExist);
-          return res.status(200).json({
-            success: token,
-          });
+          if (userExist.role == "admin") {
+            return res.status(200).json({
+              success: token,
+              role: 1,
+            });
+          } else {
+            return res.status(200).json({
+              success: token,
+            });
+          }
         } else {
           return res.status(403).json({
             message: "Password Missmathch",

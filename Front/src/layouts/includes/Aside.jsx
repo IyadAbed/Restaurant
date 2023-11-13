@@ -16,7 +16,7 @@ export const Aside = () => {
       id="drawer-navigation"
       className="fixed top-0 z-50 w-60  h-screen  transition-transform -translate-x-full  md:translate-x-0"
     >
-      <div className="overflow-y-auto py-5 px-3 h-full bg-[#396c84] ">
+      <div className="overflow-y-auto py-5 px-3 h-full bg-amber-300 ">
         <ul className="space-y-2">
           <li>
             <Link
@@ -45,19 +45,10 @@ export const Aside = () => {
               Orders{" "}
             </Link>
           </li>
-          <li>
-            <Link
-              to="/about"
-              className="flex  items-center gap-2 p-2  w-full text-base font-medium text-white rounded-lg transition duration-75 group hover:bg-[#fff] hover:text-black"
-            >
-              <FcAbout />
-              About Us
-            </Link>
-          </li>
           <Link
             to="/"
             onClick={() => {
-              dispatch(logout);
+              dispatch(logout());
               navigate("/");
             }}
           >

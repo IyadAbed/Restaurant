@@ -28,4 +28,13 @@ module.exports = {
       res.status(500).json({ error: error.message });
     }
   },
+  deleteOne: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const allMenu = await Menu.deleteOne({ _id: id });
+      res.status(200).json({ success: "deleted" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 };

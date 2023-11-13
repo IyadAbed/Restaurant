@@ -6,6 +6,7 @@ import { TimePicker } from "react-ios-time-picker";
 // import { formatCurrency } from "../../utils/helpers";
 import {
   addItem,
+  addServeTime,
   getCurrentQuantityById,
   getItem,
 } from "../plugins/redux/reducers/TableReducer";
@@ -13,7 +14,6 @@ import { useState } from "react";
 
 function MenuItem({ pizza, selectedDate }) {
   const dispatch = useDispatch();
-  console.log(pizza);
   const { _id: id, name, price, discreption, soldOut, image } = pizza;
 
   const currentQuantity = useSelector(getCurrentQuantityById(id));
@@ -40,7 +40,7 @@ function MenuItem({ pizza, selectedDate }) {
       <img
         src={image}
         alt={name}
-        className={`h-24 ${soldOut ? "opacity-70 grayscale" : ""}`}
+        className={`w-24 ${soldOut ? "opacity-70 grayscale" : ""}`}
       />
       <div className="flex grow flex-col pt-0.5">
         <div className="flex justify-between items-center">
@@ -59,6 +59,9 @@ function MenuItem({ pizza, selectedDate }) {
                 onChange={onChange}
                 value={value}
                 popupClassName="flex justify-center items-center"
+                onSave={(timeValue) =>
+                  dispatch(addServeTime({ id, timeValue }))
+                }
               />
               <UpdateQuantity pizzaId={id} currentQuantity={currentQuantity} />
               <DeleteItem pizzaId={id} />

@@ -28,7 +28,7 @@ function Login() {
       const response = await dispatch(login(data));
       console.log(response);
       if (response.payload?.success) {
-        navigate("/");
+        response.payload?.role == 1 ? navigate("/admin") : navigate("/");
       } else {
         console.log(response);
       }
